@@ -1,0 +1,13 @@
+{
+    "name": "moriorgames/bfai-battle-server",
+    "type": "project",
+    "description": "Moriorgames Battle server for BFAI project",
+    "require": {
+        "php": "^7.1",
+        "cboden/ratchet": "0.3.*",
+        "predis/predis": "^1.1"
+    },
+    "autoload": {
+        "psr-4": {"": "src/"}
+    }
+}
