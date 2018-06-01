@@ -1,21 +1,9 @@
 # Build command:
 # docker build -t moriorgames/socket-server .
 # Run command:
-# docker run -td --name socket_server -p 5100:5100 moriorgames/socket-server
-FROM        ubuntu:17.10
+# docker run -td --name bfai_socket -p 5100:5100 moriorgames/socket-server
+FROM        moriorgames/php72-base
 MAINTAINER  MoriorGames "moriorgames@gmail.com"
-
-# Install packages
-RUN         apt-get update -y
-RUN         apt-get upgrade -y
-RUN         apt-get install -y software-properties-common
-RUN         apt-get install -y language-pack-en-base
-RUN         LC_ALL=en_US.UTF-8 add-apt-repository ppa:ondrej/php
-
-# Once the PPA is installed, update the local package cache to include its contents:
-RUN         apt-get update
-RUN         apt-get install -y php7.1 php7.1-mysql zip php7.1-xml
-RUN         apt-get install -y vim
 
 # Create Application directory
 RUN         mkdir -p /app && rm -fr /var/www/html && ln -s /app /var/www/html
