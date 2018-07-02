@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use Entity\BattleAction;
+use App\Entity\BattleAction;
 use Ratchet\ConnectionInterface;
 use Ratchet\MessageComponentInterface;
 
