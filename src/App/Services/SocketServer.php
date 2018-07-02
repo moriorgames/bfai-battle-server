@@ -1,6 +1,6 @@
 <?php
 
-namespace Services;
+namespace App\Services;
 
 use Entity\BattleAction;
 use Ratchet\ConnectionInterface;
