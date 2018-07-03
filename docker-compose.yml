@@ -1,0 +1,18 @@
+version: '3'
+
+services:
+    battle_server:
+      image: moriorgames/socket-server
+      container_name: bfai_socket
+      ports:
+        - "5100:5100"
+#      volumes:
+#        - .:/var/www/html
+      links:
+        - redis:redis
+
+    redis:
+      image: redis
+      container_name: bfai_redis
+      ports:
+        - "6379:6379"
