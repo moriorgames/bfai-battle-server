@@ -3,8 +3,10 @@
 namespace App\Services;
 
 use App\Entity\BattleAction;
+use App\Factories\RedisClientStaticFactory;
 use Ratchet\ConnectionInterface;
 use Ratchet\MessageComponentInterface;
+use App\Repository\BattleActionRepository;
 
 /**
  * Class SocketServer
@@ -48,14 +50,12 @@ class SocketServer implements MessageComponentInterface
             $battleHeroId = $skillId = $x = $y = 999;
             extract($params);
 
-            $battleAction = new BattleAction;
+            $battleAction = new BattleAction(
+                $battleToken, $userToken, $battleHeroId, $skillId, $x, $y
+            );
             $battleAction->setId(123);
-            $battleAction->setBattleToken($battleToken);
-            $battleAction->setUserToken($userToken);
-            $battleAction->setBattleHeroId($battleHeroId);
-            $battleAction->setSkillId($skillId);
-            $battleAction->setX($x);
-            $battleAction->setY($y);
+            $client = RedisClientStaticFactory::create();
+            (new BattleActionRepository($client))->persist($battleAction);
 
             foreach ($this->clients as $client) {
                 $client->send(json_encode($battleAction->toArray()));

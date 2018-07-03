@@ -7,7 +7,7 @@ services:
       ports:
         - "5100:5100"
 #      volumes:
-#        - .:/var/www/html
+#        - .:/app
       links:
         - redis:redis
 

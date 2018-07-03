@@ -4,40 +4,30 @@ namespace App\Entity;
 
 class BattleAction
 {
-    /**
-     * @var int
-     */
+
     private $id;
 
-    /**
-     * @var string
-     */
     private $battleToken;
 
-    /**
-     * @var string
-     */
     private $userToken;
 
-    /**
-     * @var int
-     */
     private $battleHeroId;
 
-    /**
-     * @var int
-     */
     private $skillId;
 
-    /**
-     * @var int
-     */
     private $x;
 
-    /**
-     * @var int
-     */
     private $y;
+
+    public function __construct(string $battleToken, string $userToken, int $battleHeroId, int $skillId, int $x, int $y)
+    {
+        $this->battleToken = $battleToken;
+        $this->userToken = $userToken;
+        $this->battleHeroId = $battleHeroId;
+        $this->skillId = $skillId;
+        $this->x = $x;
+        $this->y = $y;
+    }
 
     public function getId(): int
     {
@@ -54,19 +44,9 @@ class BattleAction
         return $this->battleToken;
     }
 
-    public function setBattleToken(string $battleToken)
-    {
-        $this->battleToken = $battleToken;
-    }
-
     public function getUserToken(): string
     {
         return $this->userToken;
-    }
-
-    public function setUserToken(string $userToken)
-    {
-        $this->userToken = $userToken;
     }
 
     public function getBattleHeroId(): int
@@ -74,19 +54,9 @@ class BattleAction
         return $this->battleHeroId;
     }
 
-    public function setBattleHeroId(int $battleHeroId)
-    {
-        $this->battleHeroId = $battleHeroId;
-    }
-
     public function getSkillId(): int
     {
         return $this->skillId;
-    }
-
-    public function setSkillId(int $skillId)
-    {
-        $this->skillId = $skillId;
     }
 
     public function getX(): int
@@ -94,19 +64,14 @@ class BattleAction
         return $this->x;
     }
 
-    public function setX(int $x)
-    {
-        $this->x = $x;
-    }
-
     public function getY(): int
     {
         return $this->y;
     }
 
-    public function setY(int $y)
+    public function toJson(): string
     {
-        $this->y = $y;
+        return json_encode($this->toArray());
     }
 
     public function toArray()
