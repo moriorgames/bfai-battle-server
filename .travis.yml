@@ -4,8 +4,9 @@ sudo: required
 language: php
 
 env:
-    - CONTAINER=bfai_socket
-    - IMAGE="moriorgames/socket-server"
+    global:
+        - CONTAINER=bfai_socket
+        - IMAGE="moriorgames/socket-server"
 
 services:
     - docker
