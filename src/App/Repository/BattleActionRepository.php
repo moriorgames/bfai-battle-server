@@ -4,7 +4,6 @@ namespace App\Repository;
 
 use App\Definitions\Redis;
 use App\Entity\BattleAction;
-use App\Services\TokenValidator;
 use Predis\Client as RedisClient;
 
 class BattleActionRepository
@@ -20,11 +19,16 @@ class BattleActionRepository
 
     public function persist(BattleAction $action): void
     {
-        if (TokenValidator::validate($action->getBattleToken()) && TokenValidator::validate($action->getUserToken())) {
-            $key = $this->key($action->getBattleToken());
-            $this->client->rpush($key, [$action->toJson()]);
-            $this->client->expire($key, Redis::TTL);
-        }
+        $key = $this->key($action->getBattleToken());
+        $this->client->rpush($key, [$action->toJson()]);
+        $this->client->expire($key, Redis::TTL);
+    }
+
+    public function nextId(BattleAction $action): int
+    {
+        $key = $this->key($action->getBattleToken());
+
+        return $this->client->llen($key);
     }
 
     private function key(string $token): string

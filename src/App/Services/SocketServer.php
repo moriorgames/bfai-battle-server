@@ -44,18 +44,13 @@ class SocketServer implements MessageComponentInterface
         echo sprintf("\n-- Message %s \n", $msg);
         $params = json_decode($msg, true);
 
-        if ($this->validateActionParams($params)) {
+        if ($this->validateParams($params)) {
 
-            $battleToken = $userToken = '';
-            $battleHeroId = $skillId = $x = $y = 999;
-            extract($params);
-
-            $battleAction = new BattleAction(
-                $battleToken, $userToken, $battleHeroId, $skillId, $x, $y
-            );
-            $battleAction->setId(123);
             $client = RedisClientStaticFactory::create();
-            (new BattleActionRepository($client))->persist($battleAction);
+            $battleActionRepo = new BattleActionRepository($client);
+            $battleAction = $this->createBattleActionFromParams($params);
+            $battleAction->setId($battleActionRepo->nextId($battleAction));
+            $battleActionRepo->persist($battleAction);
 
             foreach ($this->clients as $client) {
                 $client->send(json_encode($battleAction->toArray()));
@@ -85,7 +80,18 @@ class SocketServer implements MessageComponentInterface
         $conn->close();
     }
 
-    private function validateActionParams(array $params): bool
+    private function createBattleActionFromParams(array $params): BattleAction
+    {
+        $battleToken = $userToken = '';
+        $battleHeroId = $skillId = $x = $y = 999;
+        extract($params);
+
+        return new BattleAction(
+            $battleToken, $userToken, $battleHeroId, $skillId, $x, $y
+        );
+    }
+
+    private function validateParams(array $params): bool
     {
         return
             isset($params['battleToken']) &&
@@ -93,6 +99,8 @@ class SocketServer implements MessageComponentInterface
             isset($params['battleHeroId']) &&
             isset($params['skillId']) &&
             isset($params['x']) &&
-            isset($params['y']);
+            isset($params['y']) &&
+            TokenValidator::validate($params['battleToken']) &&
+            TokenValidator::validate($params['userToken']);
     }
 }
